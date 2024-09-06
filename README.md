@@ -28,8 +28,22 @@
 
 ## Project setup
 
+Initialize docker container
+
+```bash
+$ docker-compose up
+```
+
+Install dependencies
+
 ```bash
 $ npm install
+```
+
+## Configure the database
+
+```bash
+$ npx prisma migrate dev --name init
 ```
 
 ## Compile and run the project
@@ -57,6 +71,8 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+# to access the test coverage analysis screen, open the file "coverage\lcov-report\src\index.html" in the browser
 
 ## Resources
 
