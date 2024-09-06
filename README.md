@@ -69,10 +69,9 @@ $ npm run test
 $ npm run test:e2e
 
 # test coverage
+# to access the test coverage analysis screen, open the file "coverage\lcov-report\src\index.html" in the browser
 $ npm run test:cov
 ```
-
-# to access the test coverage analysis screen, open the file "coverage\lcov-report\src\index.html" in the browser
 
 ## Resources
 
