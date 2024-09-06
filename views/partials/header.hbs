@@ -1,0 +1,37 @@
+<header class="main-header clearfix" role="header">
+    <div class="logo">
+        <a href="#"><em>Grad</em> School</a>
+    </div>
+    <a href="#menu" class="menu-link"><i class="fa fa-bars"></i></a>
+    <nav id="menu" class="main-nav" role="navigation">
+        <ul class="main-menu">
+            <li><a href="{{viewConfig.baseUrl}}" onclick="location.href='{{viewConfig.baseUrl}}'">Home</a></li>
+            <li><a href="">About Us</a></li>
+            <li class="logoff-user d-none"><a href="{{viewConfig.baseUrl}}/auth"
+                    onclick="location.href='{{viewConfig.baseUrl}}/auth'">Log-in</a>
+            </li>
+            <li class="login-user d-none"><a href="{{viewConfig.baseUrl}}/courses"
+                    onclick="location.href='{{viewConfig.baseUrl}}/courses'">Courses</a></li>
+            <li class="login-user d-none has-submenu"><a href="" id="menu-username"></a>
+                <ul class="sub-menu">
+                    <li><a href="{{viewConfig.baseUrl}}/users/my-account"
+                            onclick="location.href='{{viewConfig.baseUrl}}/users/my-account'">My account</a></li>
+                    <li><a href="" onclick="userLogoff()">Log-off</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
+<script>
+    const dataUser = getUser();
+    if (dataUser) {
+        document.getElementById("menu-username").text = `User: ${dataUser.username}`
+        document.querySelectorAll('.login-user').forEach(e => {
+            e.classList.remove('d-none')
+        })
+    } else {
+        document.querySelectorAll('.logoff-user').forEach(e => {
+            e.classList.remove('d-none')
+        })
+    }
+</script>

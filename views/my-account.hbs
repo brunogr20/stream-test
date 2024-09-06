@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--head-->
+{{> head}}
+
+<body>
+
+    <!--header-->
+    {{> header}}
+
+    <section class="section contact" data-section="section6">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-md-12">
+                    <div class="section-heading">
+                        <h2>My Account</h2>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <form id="contact" action="" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <label class="text-white" for="username">Enter an id:</label>
+                                    <input name="username" disabled type="text" class="form-control" id="username"
+                                        placeholder="" required="">
+                                </fieldset>
+                            </div>
+
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <label class="text-white" for="amount">Enter the number of simultaneous streams you
+                                        want:</label>
+                                    <input name="amount" type="number" min="0" class="form-control" id="amount"
+                                        placeholder="" required="">
+                                </fieldset>
+                            </div>
+
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <label class="text-white" for="password">Enter your password:</label>
+                                    <input name="password" type="password" class="form-control" id="password"
+                                        placeholder="" required="">
+                                </fieldset>
+                            </div>
+
+                            <div class="col-md-12 ">
+                                <fieldset class="d-flex justify-content-between">
+                                    <a href="/auth" rel="sponsored" target="_parent"></a>
+                                    <button type="button" id="form-submit" onclick="updateProfile()"
+                                        class="button ">Save</button>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{> footer}}
+
+    <script>
+        const profile = async () => {
+            try {
+                const result = await makeRequest('get', `{{viewConfig.baseUrl}}/users/profile`);
+
+                if (result?.username) {
+                    document.getElementsByName("username")[0].value = result?.username;
+                }
+
+                if (result?.simultaneousFlowLimit) {
+                    document.getElementsByName("amount")[0].value = result?.simultaneousFlowLimit;
+                }
+
+                document.getElementsByName("password")[0].value = '';
+
+            } catch (error) {
+                console.error('Request failed:', error);
+                if (error?.statusCode == 401) {
+                    alert('There is already a user with this id')
+                } else {
+                    alert(error?.message)
+                }
+            }
+        }
+        profile()
+
+        const updateProfile = async () => {
+            const data = {
+                simultaneousFlowLimit: document.getElementsByName("amount")[0].value,
+                password: document.getElementsByName("password")[0].value
+            }
+
+            if (!data.simultaneousFlowLimit) {
+                alert('Enter the number of streams')
+                return;
+            }
+            const validNumber = Number(data.simultaneousFlowLimit.replace(/[^0-9-]/g, ''));
+            if (!validNumber && validNumber != 0 || validNumber < 0) {
+                alert('Enter a valid number of streams')
+                return;
+            }
+
+            try {
+                const result = await makeRequest('post', `{{viewConfig.baseUrl}}/users/update-profile`, data);
+
+                alert('Saved successfully')
+
+                window.location.reload()
+            } catch (error) {
+                console.error('Request failed:', error);
+                if (error?.statusCode == 403) {
+                    alert('The number of inserted streams cannot be less than the stream limit')
+                } else {
+                    alert(error?.message)
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>

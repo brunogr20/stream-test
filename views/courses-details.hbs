@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--head-->
+{{> head}}
+
+<body>
+
+  <!--header-->
+  {{> header}}
+
+  <section class="section contact" data-section="section6">
+    <div class="container">
+      <div class="row justify-content-md-center">
+        <div class="col-md-12">
+          <div class="section-heading">
+            <h2>{{curseTitle}}</h2>
+          </div>
+        </div>
+        <div class="col-md-6">
+
+          <video id="videoPlayer" controls width="640" height="360">
+            Your browser does not support the video tag.
+          </video>
+             <button type="button" onclick="closeVideo()" class="button ">Close video</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer}}
+
+  <script>
+    const getFile = async () => {
+     const deviceId = getDeviceId();
+      try {
+        const result = await makeRequest('get', `{{viewConfig.baseUrl}}/courses/file/{{curseId}}/${deviceId}`);
+
+        document.getElementById('videoPlayer').src = result.url;
+
+        renewalBond();
+      } catch (error) {
+        console.error('Request failed:', error);
+        if (error?.statusCode == 406) {
+          alert('You have reached the maximum number of broadcasts reached. \n  Please update your limit!')
+          window.location.href = '{{viewConfig.baseUrl}}/users/my-account'
+        } else {
+          alert(error?.message)
+        }
+      }
+    }
+    getFile();
+
+    const renewalBond  = async () =>{
+         setInterval(async () => {
+              const data = {
+                deviceId: getDeviceId(),
+              }
+              try {    
+                
+                await makeRequest('post', `{{viewConfig.baseUrl}}/courses/renewal-bond`,data);
+
+              } catch (error) { }
+
+      }, 10000)
+    }
+
+    const closeVideo  = async () =>{
+        const data = {
+          deviceId: getDeviceId(),
+        }
+        try {    
+          
+          await makeRequest('post', `{{viewConfig.baseUrl}}/courses/close-video`,data);
+          window.location.href = '{{viewConfig.baseUrl}}/courses'
+        } catch (error) { }
+    }
+
+  </script>
+
+</body>
+
+</html>

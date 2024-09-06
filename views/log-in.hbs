@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--head-->
+{{> head}}
+
+<body>
+
+    <!--header-->
+    {{> header}}
+
+    <section class="section contact" data-section="section6">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-md-12">
+                    <div class="section-heading">
+                        <h2>Log in</h2>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <form id="contact" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <label class="text-white" for="name">Enter an id:</label>
+                                    <input name="username" type="text" class="form-control" id="name" placeholder=""
+                                        required="">
+                                </fieldset>
+                            </div>
+
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <label class="text-white" for="password">Enter your password:</label>
+                                    <input name="password" type="password" class="form-control" id="password"
+                                        placeholder="" required="">
+                                </fieldset>
+                            </div>
+
+                            <div class="col-md-12 ">
+                                <fieldset class="d-flex justify-content-between">
+                                    <a href="/users/sign-up" rel="sponsored" target="_parent">Sign-up</a>
+                                    <button type="button" id="form-submit" class="button" onclick="login()">Log
+                                        in</button>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{> footer}}
+
+    <script>
+        const login = async () => {
+            const data = {
+                username: document.getElementsByName("username")[0].value,
+                password: document.getElementsByName("password")[0].value
+            }
+
+            if (!data.username) {
+                alert('The Id field cannot be empty')
+                return;
+            }
+
+            if (!data.password) {
+                alert('The password field cannot be empty')
+                return;
+            }
+
+            try {
+                const result = await makeRequest('post', `{{viewConfig.baseUrl}}/auth/login`, data);
+
+                if (result?.accessToken) {
+                    setUserToken(result.accessToken, result.username);
+                    window.location.href = result.redirect;
+                }
+
+            } catch (error) {
+                if (error?.statusCode == 401) {
+                    alert('Invalid user credentials')
+                } else {
+                    alert(error?.message)
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

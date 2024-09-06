@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--head-->
+{{> head}}
+
+<body>
+
+  <!--header-->
+  {{> header}}
+
+  <section class="section courses" data-section="section4">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="section-heading">
+            <h2>Courses</h2>
+          </div>
+        </div>
+        <div class="owl-carousel owl-theme">
+
+          {{#each dataCourses}}
+          <div class="item">
+            <img src="{{imageUrl}}" alt="Course #1">
+            <div class="down-content">
+              <h4>{{ title }}</h4>
+              <p>{{text}}</p>
+              <div class="author-image">
+                <img src="{{authorImage}}">
+              </div>
+              <div class="text-button-pay">
+                <a href="{{viewConfig.baseUrl}}/courses/details/{{id}}">View <i
+                    class="fa fa-angle-double-right"></i></a>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer}}
+
+</body>
+
+</html>
